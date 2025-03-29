@@ -27,8 +27,8 @@ pip install -r requirements.txt
 ### Cloner le dépôt GitHub
 
 ```bash
-git clone https://github.com/sy895/face_expression_recognition.git
-cd face_expression_recognition
+git clone https://github.com/sy895/facial_emotion_recognition.git
+cd facial_emotion_recognition
 ```
 
 ## Utilisation
