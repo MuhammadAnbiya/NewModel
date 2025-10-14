@@ -1,10 +1,12 @@
-tensorflow
-opencv-python
-numpy
-matplotlib
-pillow
-flask
-scikit-learn
-scipy
-pandas
-requests
+# Gunakan versi TensorFlow yang stabil untuk Python 3.12
+tensorflow==2.16.1
+
+# Versi yang terbukti stabil
+opencv-python-headless==4.9.0.80
+numpy==1.26.4
+streamlit==1.35.0
+streamlit-webrtc==0.47.6
+Pillow==10.3.0
+
+# Pin protobuf untuk menghindari konflik dengan TensorFlow
+protobuf==4.25.3
