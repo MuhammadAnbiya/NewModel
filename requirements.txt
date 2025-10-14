@@ -1,12 +1,14 @@
-# Gunakan versi TensorFlow yang stabil untuk Python 3.12
-tensorflow==2.16.1
+# requirements.txt - VERSI FINAL
 
-# Versi yang terbukti stabil
+streamlit==1.35.0
+tensorflow==2.16.1
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
-streamlit==1.35.0
-streamlit-webrtc==0.47.6
 Pillow==10.3.0
-
-# Pin protobuf untuk menghindari konflik dengan TensorFlow
 protobuf==4.25.3
+
+# Pin dependensi inti dari streamlit-webrtc
+aiortc==1.6.0
+pydantic==2.5.3
+streamlit-webrtc==0.47.6
+av==11.0.0
