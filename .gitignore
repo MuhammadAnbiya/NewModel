@@ -1,0 +1,27 @@
+# Lingkungan Virtual Python
+/venv
+/env
+*.env
+
+# Cache dan file kompilasi Python
+__pycache__/
+*.pyc
+
+# File Model Machine Learning (PENTING!)
+# File .h5 bisa sangat besar dan akan membuat repositori Anda berat.
+*.h5
+*.hdf5
+
+# Folder Dataset
+# Sama seperti model, dataset biasanya besar dan tidak disimpan di Git.
+/train/
+/test/
+/dataset/
+
+# File konfigurasi IDE/Editor
+.vscode/
+.idea/
+
+# File yang dibuat oleh Sistem Operasi
+.DS_Store
+Thumbs.db

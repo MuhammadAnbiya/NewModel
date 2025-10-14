@@ -1,29 +1,74 @@
+# import tensorflow as tf
+# from tensorflow.keras.preprocessing import image
+# import numpy as np
+# import matplotlib.pyplot as plt
+
+
+# model = tf.keras.models.load_model('emotion_model.h5') #chargement
+
+
+# img_path = 'C:/Users/syrin/OneDrive/Bureau/face_espression_recognition/test/happy/PrivateTest_95094.jpg'  #A ADAPTER : si on veut tester une image de notre dossier pour vérifier qu'il est compétant
+
+
+# img = image.load_img(img_path, target_size=(48, 48), color_mode='grayscale')
+# img_array = image.img_to_array(img)
+# img_array = np.expand_dims(img_array, axis=0)  
+# img_array = img_array / 255.0  # Normalisation
+
+
+# prediction = model.predict(img_array)
+# predicted_class = np.argmax(prediction)  #prédiction
+
+
+# class_names = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+# print(f"Emotion prédite : {class_names[predicted_class]}")
+
+
+# plt.imshow(img, cmap="gray") #affichage
+# plt.title(f"Emotion: {class_names[predicted_class]}")
+# plt.show()
+
+
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 import numpy as np
 import matplotlib.pyplot as plt
 
+model = tf.keras.models.load_model('emotion_model.h5') 
 
-model = tf.keras.models.load_model('emotion_model.h5') #chargement
+# Ganti path ini ke gambar yang ingin Anda uji
+# Pastikan path ini benar di komputer Anda
+img_path = 'path/ke/gambar/anda.jpg'  
 
+# Label asli dari model
+original_class_names = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 
-img_path = 'C:/Users/syrin/OneDrive/Bureau/face_espression_recognition/test/happy/PrivateTest_95094.jpg'  #A ADAPTER : si on veut tester une image de notre dossier pour vérifier qu'il est compétant
-
+# Fungsi untuk memetakan 7 emosi ke 3 kategori
+def map_emotion(emotion):
+    if emotion == 'happy':
+        return 'satisfied'
+    elif emotion in ['angry', 'disgust', 'fear', 'sad']:
+        return 'unsatisfied'
+    else:  # neutral, surprise
+        return 'netral'
 
 img = image.load_img(img_path, target_size=(48, 48), color_mode='grayscale')
 img_array = image.img_to_array(img)
 img_array = np.expand_dims(img_array, axis=0)  
-img_array = img_array / 255.0  # Normalisation
+img_array = img_array / 255.0
 
-
+# Prediksi dari 7 kelas
 prediction = model.predict(img_array)
-predicted_class = np.argmax(prediction)  #prédiction
+predicted_index = np.argmax(prediction)
 
+# Dapatkan nama emosi asli
+predicted_emotion = original_class_names[predicted_index]
 
-class_names = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
-print(f"Emotion prédite : {class_names[predicted_class]}")
+# Terjemahkan ke 3 kategori baru
+final_emotion = map_emotion(predicted_emotion)
 
+print(f"Emotion prédite : {final_emotion}")
 
-plt.imshow(img, cmap="gray") #affichage
-plt.title(f"Emotion: {class_names[predicted_class]}")
+plt.imshow(img, cmap="gray") 
+plt.title(f"Emotion: {final_emotion}")
 plt.show()
