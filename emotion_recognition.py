@@ -43,16 +43,22 @@ img_path = 'path/ke/gambar/anda.jpg'
 # Label asli dari model
 original_class_names = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 
-# Fungsi untuk memetakan 7 emosi ke 3 kategori
+# DIUBAH: Aturan pemetaan baru
 def map_emotion(emotion):
-    if emotion == 'happy':
+    if emotion in ['happy', 'surprise']:
         return 'satisfied'
     elif emotion in ['angry', 'disgust', 'fear', 'sad']:
         return 'unsatisfied'
-    else:  # neutral, surprise
-        return 'netral'
+    else:  # Hanya 'neutral' yang tersisa
+        return 'neutral'
 
-img = image.load_img(img_path, target_size=(48, 48), color_mode='grayscale')
+# Pastikan file gambar ada, jika tidak, kode akan error
+try:
+    img = image.load_img(img_path, target_size=(48, 48), color_mode='grayscale')
+except FileNotFoundError:
+    print(f"Error: File tidak ditemukan di '{img_path}'. Mohon ganti path tersebut.")
+    exit()
+
 img_array = image.img_to_array(img)
 img_array = np.expand_dims(img_array, axis=0)  
 img_array = img_array / 255.0

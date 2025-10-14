@@ -64,14 +64,14 @@ emotion_model = load_model("emotion_model.h5")
 # Label asli dari model
 original_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
-# Fungsi untuk memetakan 7 emosi ke 3 kategori
+# DIUBAH: Aturan pemetaan baru
 def map_emotion(emotion):
-    if emotion == 'Happy':
+    if emotion in ['Happy', 'Surprise']:
         return 'satisfied'
     elif emotion in ['Angry', 'Disgust', 'Fear', 'Sad']:
         return 'unsatisfied'
-    else:  # Neutral, Surprise
-        return 'netral'
+    else:  # Hanya 'Neutral' yang tersisa
+        return 'neutral'
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml') 
 cap = cv2.VideoCapture(0) 
