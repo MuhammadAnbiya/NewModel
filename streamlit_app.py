@@ -4,7 +4,6 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from PIL import Image
 
-# --- Konfigurasi dan Pemuatan Model ---
 st.set_page_config(page_title="Deteksi Emosi Wajah", layout="centered")
 
 @st.cache_resource
@@ -29,11 +28,8 @@ def map_emotion(emotion):
     else:
         return 'neutral'
 
-# --- Fungsi untuk Memproses Gambar (Reusable) ---
 def process_image(frame_bgr, show_messages=True):
-    """Fungsi ini mengambil frame BGR dari OpenCV dan mengembalikan frame dengan deteksi."""
     output_frame = frame_bgr.copy()
-    
     gray = cv2.cvtColor(output_frame, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
@@ -44,8 +40,6 @@ def process_image(frame_bgr, show_messages=True):
         st.success(f"Terdeteksi {len(faces)} wajah!")
 
     for (x, y, w, h) in faces:
-        # --- PERUBAHAN DI DUA BARIS INI ---
-        # 1. Ubah warna box ke Hijau (0, 255, 0)
         cv2.rectangle(output_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
         
         roi_gray = gray[y:y + h, x:x + w]
@@ -61,12 +55,10 @@ def process_image(frame_bgr, show_messages=True):
         
         label = f"{final_emotion}: {prediction[max_index]*100:.2f}%"
         
-        # 2. Ubah warna teks ke Hijau dan perbesar font scale dari 0.7 menjadi 0.9
         cv2.putText(output_frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
     return output_frame
 
-# --- Antarmuka Pengguna (UI) Streamlit ---
 st.title("🤖 Deteksi Emosi Wajah")
 st.write("Aplikasi ini dapat mendeteksi emosi melalui unggahan gambar atau video webcam real-time.")
 
