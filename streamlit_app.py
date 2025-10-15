@@ -22,9 +22,9 @@ face_cascade = load_face_cascade()
 ORIGINAL_LABELS = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
 def map_emotion(emotion):
-    if emotion in ['Happy', 'Surprise']:
+    if emotion == 'Happy':
         return 'satisfied'
-    elif emotion in ['Angry', 'Disgust', 'Fear', 'Sad']:
+    elif emotion in ['Angry', 'Disgust', 'Fear', 'Sad', 'Surprise']:
         return 'unsatisfied'
     else:
         return 'neutral'
@@ -32,7 +32,6 @@ def map_emotion(emotion):
 # --- Fungsi untuk Memproses Gambar (Reusable) ---
 def process_image(frame_bgr, show_messages=True):
     """Fungsi ini mengambil frame BGR dari OpenCV dan mengembalikan frame dengan deteksi."""
-    # Salin frame agar frame asli tidak termodifikasi
     output_frame = frame_bgr.copy()
     
     gray = cv2.cvtColor(output_frame, cv2.COLOR_BGR2GRAY)
@@ -45,7 +44,10 @@ def process_image(frame_bgr, show_messages=True):
         st.success(f"Terdeteksi {len(faces)} wajah!")
 
     for (x, y, w, h) in faces:
-        cv2.rectangle(output_frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
+        # --- PERUBAHAN DI DUA BARIS INI ---
+        # 1. Ubah warna box ke Hijau (0, 255, 0)
+        cv2.rectangle(output_frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        
         roi_gray = gray[y:y + h, x:x + w]
         roi_gray = cv2.resize(roi_gray, (48, 48))
         roi_gray = np.expand_dims(roi_gray, axis=0)
@@ -58,7 +60,9 @@ def process_image(frame_bgr, show_messages=True):
         final_emotion = map_emotion(predicted_emotion)
         
         label = f"{final_emotion}: {prediction[max_index]*100:.2f}%"
-        cv2.putText(output_frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
+        
+        # 2. Ubah warna teks ke Hijau dan perbesar font scale dari 0.7 menjadi 0.9
+        cv2.putText(output_frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
     return output_frame
 
@@ -72,7 +76,6 @@ mode = st.sidebar.selectbox(
     key="mode_selector"
 )
 
-# Inisialisasi session state untuk kontrol loop
 if 'run_webcam' not in st.session_state:
     st.session_state.run_webcam = False
 
@@ -88,7 +91,6 @@ if mode == "🎥 Deteksi Video dari Webcam":
         if st.button("Stop"):
             st.session_state.run_webcam = False
     
-    # Buat placeholder untuk menampilkan frame video
     frame_placeholder = st.empty()
     
     if st.session_state.run_webcam:
@@ -103,16 +105,10 @@ if mode == "🎥 Deteksi Video dari Webcam":
                     st.session_state.run_webcam = False
                     break
                 
-                # Proses frame untuk deteksi
                 processed_frame = process_image(frame, show_messages=False)
-                
-                # Konversi ke RGB untuk ditampilkan di Streamlit
                 frame_rgb = cv2.cvtColor(processed_frame, cv2.COLOR_BGR2RGB)
-                
-                # Tampilkan frame di placeholder
                 frame_placeholder.image(frame_rgb, channels="RGB")
             
-            # Lepaskan kamera setelah loop berhenti
             cap.release()
 
 elif mode == "🖼️ Unggah Gambar":
